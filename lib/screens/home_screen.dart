@@ -1,11 +1,14 @@
 // import 'dart:html';
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/cupertino.dart';
+// import 'package:flutter/rendering.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:soundpool/soundpool.dart';
+
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -34,14 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Soundpool _soundpool;
 
   // インスタンスは、画面開いた際に一回通り格納
-  int number = 3;
+  // int number = 3;
 
   @override
+  // void initState() async{
   void initState() {
     super.initState();
     // await _initSounds();
     _initSounds();
-    // print("initState終了＝build()発動したぞ");
+    print("initState終了＝build()発動したぞ");
     // _soundpool = Soundpool();
   }
 
@@ -59,10 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
       //  _soundsIds[0] = awaitrootBundle
       //     .load("assets/sounds/sound1.mp3")
       //     .then((value) => _soundpool.load(value));
-      // print("initSounds終了＝効果音発動したぞ");
+      print("initSounds終了＝効果音発動したぞ");
       // initStateの中で非同期処理と行う ->setStateで処理ｎタイミングを図らないと、流れてしまい音がならない
-      setState(() {});
-    } on IOException catch (error) {
+      setState(() {}); // buildMethod 呼び出すのが目的故空。initStateから飛んできたメソゆえ、こちらでsetState()必須
+    } on IOException catch(error) {
       print("例外エラー内容:$error");
     }
   }
@@ -88,52 +92,56 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text("レスポンスマシーン"),
         centerTitle: true,
       ),
-      body: Container(
-        padding: EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Row(
-                // クロス軸を設けて整頓する。縦方向にもexpandするには
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  // _text01のコメントを、網目ごとに表示させるためボタンの引数へ
-                  // Expanded(flex: 1, child: _soundButton(_text01)),
-                  Expanded(
-                      flex: 1, child: _soundButton(_texts[0], _soundIds[0])),
-                  Expanded(
-                      flex: 1, child: _soundButton(_texts[1], _soundIds[1])),
-                ],
+      body: Padding(
+        // padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          padding: EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Row(
+                  // クロス軸を設けて整頓する。縦方向にもexpandするには
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    // _text01のコメントを、網目ごとに表示させるためボタンの引数へ
+                    // Expanded(flex: 1, child: _soundButton(_text01)),
+                    Expanded(
+                        flex: 1, child: _soundButton(_texts[0], _soundIds[0])),
+                    Expanded(
+                        flex: 1, child: _soundButton(_texts[1], _soundIds[1])),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Expanded(
-                      flex: 1, child: _soundButton(_texts[2], _soundIds[2])),
-                  Expanded(
-                      flex: 1, child: _soundButton(_texts[3], _soundIds[3])),
-                ],
+              Expanded(
+                flex: 1,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Expanded(
+                        flex: 1, child: _soundButton(_texts[2], _soundIds[2])),
+                    Expanded(
+                        flex: 1, child: _soundButton(_texts[3], _soundIds[3])),
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                // []配列リストをchildren配下にして、同種をまとめて扱う。[リスト]の前にリストの<型>を指定。
-                // children[0],children[1],children[2]で指定可能
-                children: <Widget>[
-                  Expanded(
-                      flex: 1, child: _soundButton(_texts[4], _soundIds[4])),
-                  Expanded(
-                      flex: 1, child: _soundButton(_texts[5], _soundIds[5])),
-                ],
+              Expanded(
+                flex: 1,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // []配列リストをchildren配下にして、同種をまとめて扱う。[リスト]の前にリストの<型>を指定。
+                  // children[0],children[1],children[2]で指定可能
+                  children: <Widget>[
+                    Expanded(
+                        flex: 1, child: _soundButton(_texts[4], _soundIds[4])),
+                    Expanded(
+                        flex: 1, child: _soundButton(_texts[5], _soundIds[5])),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -147,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: RaisedButton(
         color: Colors.blueGrey,
         onPressed: () => _playSound(soundId),
-        shape: RoundedRectangleBorder(
+        shape: RoundedRectangleBorder( // 角丸
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
         ),
         child: Text(displayText, style: TextStyle(color: Colors.cyan)),
@@ -161,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
 // Widget _initSounds() async {
 //   // xxx = await xxx;
 //   // }
-// }
+// }m
 
 }
 
@@ -173,6 +181,13 @@ class _HomeScreenState extends State<HomeScreen> {
 // 状態を管理するときの３つ＝initState, setState, dispose
 // 非同期処理(async-await)＝時間のかかる処理をシンクロasyncで実行、awaitで本処理に戻す
 // ->非同期での戻り値をfutureに一時格納（どのタイミングで本処理に戻すか場合による為）
-// Widgetとは石、動かない動けないもの。動いた状態の石を生み出すbuild()。
+
+// Widgetとは石。動かない動けないもの。動いたあとの状態の石を生み出すbuild()。
 // ->statefulは動きが有りなので、石を矯正的に変化させるbuild()するためにクラス2つ宣言
 // MVCのイメージで言うと、widgetがビューで、stateがコントローラー
+
+// コンパイルエラー；文法ゆえ動かない -> コード修正
+// ランタイムエラー；実行時想定外が発生 -> デバッグでわかる、コード修正
+// 論理エラー；理想と現実とギャップ
+
+// try-catch-finally
